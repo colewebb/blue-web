@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import json
+import time
 from sys import argv, exit
 from os import listdir as ls
 
@@ -43,17 +44,13 @@ def grab(filepath, title = None):
     return toReturn
 
 
-def rename(json):
-    """converts a json name to an html name"""
-    json = json.split(".")
-    return json[0] + ".html"
-
-
 def render_page(filepath):
     """renders a page from a JSON file"""
     config = read_json(filepath)
     columns = int(config['page']['columns'])
-    page = f"<!-- Rendered by render.py v{version} -->\n"
+    t = time.ctime()
+    start_time = time.time()
+    page = ""
     page += grab(argv[1] + config['page']['header'], title = config['page']['title'])
     page += "\n   <body>\n        <div class='row justify-content-start'>"
     i = 0
@@ -68,6 +65,8 @@ def render_page(filepath):
     page += ("\n            <div class='col-sm'></div>" * ((columns - i % columns) % columns))
     page += "\n        </div>\n   </body>\n"
     page += grab(argv[1] + config['page']['footer'])
+    end_time = time.time()
+    page += f"\n<!-- Rendered by render.py v{version} on {t} in {end_time - start_time:0.5f} seconds -->\n"
     return page
 
 
@@ -79,7 +78,7 @@ def main(args):
     for f in contents:
         if f.endswith(".json"):
             j = read_json(args[1] + "/" + f)
-            print(render_page(args[1] + "/" + f), file = open(rename(f), "w"))
+            print(render_page(args[1] + "/" + f), file = open(j['page']['path'], "w"))
 
 
 if __name__ == "__main__":

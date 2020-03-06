@@ -59,38 +59,38 @@ def render_content(filepath, all_files = False):
     audio = False
     text = False
     # empty string for mime type
-    type = ""
+    mtype = ""
     # mp4 video case:
     if filepath.endswith(".mp4"):
         video = True
-        type = "video/mp4"
+        mtype = "video/mp4"
     # webm video case:
-    else if filepath.endswith(".webm"):
+    elif filepath.endswith(".webm"):
         video = True
-        type = "video/webm"
+        mtype = "video/webm"
     # mp3 audio case
-    else if filepath.endswith(".mp3"):
+    elif filepath.endswith(".mp3"):
         audio = True
-        type = "audio/mpeg"
+        mtype = "audio/mpeg"
     # WAV audio case
-    else if filepath.endswith(".wav"):
+    elif filepath.endswith(".wav"):
         audio = True
-        type = "audio/wav"
+        mtype = "audio/wav"
     # if all_files has been overridden, then all files are considered (not just media)
-    else if all_files:
+    elif all_files:
         # plain text case
         if filepath.endswith(".txt"):
             text = True
-            type = "text/plain"
+            mtype = "text/plain"
         # html stub case
-        else if filepath.endswith(".html"):
+        elif filepath.endswith(".html"):
             text = True
-            type = "text/html"
+            mtype = "text/html"
         # markdown case
         # TODO: consider md rendering to HTML in here
-        else if filepath.endswith(".md"):
+        elif filepath.endswith(".md"):
             text = True
-            type = "text/markdown"
+            mtype = "text/markdown"
         # none of the above case
         else:
             pass
@@ -102,21 +102,21 @@ def render_content(filepath, all_files = False):
         return f"""
             <div class='center'>
                 <video width=90% controls>
-                    <source src='{filepath}' type='{type}'>
+                    <source src='{filepath}' type='{mtype}'>
                     Your browser does not support video.
                 </video>
             </div>"""
     # audio rendering
-    else if audio:
+    elif audio:
         return f"""
             <div class='center'>
                 <audio width=90% controls>
-                    <source src='{filepath}' type='{type}'>
+                    <source src='{filepath}' type='{mtype}'>
                     Your browser does not support audio.
                 </audio>
             </div>"""
     # text rendering, if allowed
-    else if all_files:
+    elif all_files:
         if text:
             return grab(filepath)
         # if the file isn't a recognized text file, link to it

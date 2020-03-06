@@ -5,3 +5,5 @@ then
 else
 	render.py $1
 fi
+echo 'time used:'
+times
